@@ -24,4 +24,4 @@ Kein Overhead. Keine Abhängigkeiten. Nur Performance.
 ### CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/DEINNAME/animora@1.0.0/dist/animora.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Lutub/animora/dist/animora.min.js"></script>
