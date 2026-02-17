@@ -202,22 +202,33 @@ if (color && initialColor && targetTextColor) {
     };
 
     const timeline = () => {
-      const steps = [];
-      let totalDelay = 0;
-      return {
-        to(selector, options) { steps.push(() => animate(selector, { ...options, delay: totalDelay })); totalDelay += options.duration || 1000; return this; },
-        from(selector, options) {
-          const els = document.querySelectorAll(selector);
-          els.forEach(el => {
-            if (options.scale !== undefined) el.style.transform = `scale(${options.scale})`;
-            if (options.opacity !== undefined) el.style.opacity = options.opacity;
-          });
-          return this.to(selector, options);
-        },
-        add(fn, offset = 0) { steps.push(() => fn(offset)); return this; },
-        play() { steps.forEach(s => s()); }
-      };
-    };
+  const steps = [];
+  let totalDuration = 0;
+
+  return {
+    to(selector, options) {
+      const startAt = totalDuration;
+      const duration = options.duration || 1000;
+
+      steps.push({ selector, options, startAt });
+      totalDuration += duration;
+
+      return this;
+    },
+
+    play() {
+      const tlStart = performance.now();
+
+      steps.forEach(step => {
+        animate(step.selector, {
+          ...step.options,
+          delay: step.startAt
+        });
+      });
+    }
+  };
+};
+
 
     const scrollTrigger = (selector, options = {}) => {
       const els = document.querySelectorAll(selector);
